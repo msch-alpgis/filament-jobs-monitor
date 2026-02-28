@@ -19,6 +19,11 @@ return [
          */
         'sub_navigation_position' => null,
     ],
+    'table' => [
+        'pagination_page_options' => [5, 10, 25, 50],
+        'default_pagination_page_option' => 25,
+        'polling_interval' => null
+    ],
     'pruning' => [
         'enabled' => true,
         'retention_days' => 7,

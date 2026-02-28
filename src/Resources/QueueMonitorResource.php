@@ -2,6 +2,7 @@
 
 namespace Croustibat\FilamentJobsMonitor\Resources;
 
+use Carbon\CarbonInterface;
 use Croustibat\FilamentJobsMonitor\Columns\ProgressColumn;
 use Croustibat\FilamentJobsMonitor\FilamentJobsMonitorPlugin;
 use Croustibat\FilamentJobsMonitor\Jobs\RetryFailedJobJob;
@@ -66,8 +67,8 @@ class QueueMonitorResource extends Resource
                 TextColumn::make('status')
                     ->badge()
                     ->label(__('filament-jobs-monitor::translations.status'))
-                    ->formatStateUsing(fn (string $state): string => __("filament-jobs-monitor::translations.{$state}"))
-                    ->color(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => __("filament-jobs-monitor::translations.{$state}"))
+                    ->color(fn(string $state): string => match ($state) {
                         'running' => 'primary',
                         'succeeded' => 'success',
                         'failed' => 'danger',
@@ -87,6 +88,16 @@ class QueueMonitorResource extends Resource
                     ->label(__('filament-jobs-monitor::translations.started_at'))
                     ->since()
                     ->sortable(),
+                TextColumn::make('duration')
+                    ->label(__('filament-jobs-monitor::translations.duration'))
+                    ->getStateUsing(function (QueueMonitor $record) {
+                        if (! $record->started_at) {
+                            return null;
+                        }
+                        $endTime = $record->finished_at ?? now();
+                        return $endTime->diffForHumans($record->started_at, CarbonInterface::DIFF_ABSOLUTE);
+                    })
+                    ->sortable(),
             ])
             ->defaultSort('started_at', 'desc')
             ->actions([
@@ -103,7 +114,7 @@ class QueueMonitorResource extends Resource
                             ->minValue(0)
                             ->suffix(__('filament-jobs-monitor::translations.minutes')),
                     ])
-                    ->visible(fn (QueueMonitor $record): bool => $record->hasFailed())
+                    ->visible(fn(QueueMonitor $record): bool => $record->hasFailed())
                     ->action(function (QueueMonitor $record, array $data): void {
                         $failedJob = FailedJob::where('uuid', $record->job_id)->first();
 
@@ -140,7 +151,7 @@ class QueueMonitorResource extends Resource
                 Action::make('details')
                     ->label(__('filament-jobs-monitor::translations.details'))
                     ->icon('heroicon-o-information-circle')
-                    ->modalContent(fn (QueueMonitor $queueMonitor) => view('filament-jobs-monitor::queue-monitor-details', [
+                    ->modalContent(fn(QueueMonitor $queueMonitor) => view('filament-jobs-monitor::queue-monitor-details', [
                         'exception_message' => $queueMonitor->exception_message,
                         'failed' => $queueMonitor->failed,
                         'attempts' => $queueMonitor->attempt,
@@ -163,7 +174,7 @@ class QueueMonitorResource extends Resource
                     ])
                     ->deselectRecordsAfterCompletion()
                     ->action(function (Collection $records, array $data): void {
-                        $failedRecords = $records->filter(fn (QueueMonitor $record) => $record->hasFailed());
+                        $failedRecords = $records->filter(fn(QueueMonitor $record) => $record->hasFailed());
 
                         if ($failedRecords->isEmpty()) {
                             Notification::make()
@@ -233,7 +244,7 @@ class QueueMonitorResource extends Resource
                             ->minValue(0)
                             ->suffix(__('filament-jobs-monitor::translations.minutes')),
                     ])
-                    ->visible(fn (): bool => FailedJob::count() > 0)
+                    ->visible(fn(): bool => FailedJob::count() > 0)
                     ->action(function (array $data): void {
                         $failedJobsCount = FailedJob::count();
 
@@ -290,7 +301,10 @@ class QueueMonitorResource extends Resource
                                 ->whereNull('finished_at');
                         }
                     }),
-            ]);
+            ])
+            ->paginationPageOptions(config('filament-jobs-monitor.table.pagination_page_options'))
+            ->defaultPaginationPageOption(config('filament-jobs-monitor.table.default_pagination_page_option'))
+            ->poll(config('filament-jobs-monitor.table.polling_interval'));
     }
 
     public static function getNavigationBadge(): ?string

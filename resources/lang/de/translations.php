@@ -17,6 +17,7 @@ return [
     'queue' => 'Queue',
     'progress' => 'Fortschritt',
     'started_at' => 'Gestartet am',
+    'duration' => 'Dauer',
     'details' => 'Details',
     'attempts' => 'Versuche',
     'exception' => 'Exception',
