@@ -1,5 +1,5 @@
 {
-    "name": "croustibat/filament-jobs-monitor",
+    "name": "msch-alpgis/filament-jobs-monitor",
     "description": "Background Jobs monitoring like Horizon for all drivers for FilamentPHP",
     "keywords": [
         "laravel",
@@ -10,7 +10,7 @@
         "monitor",
         "background-jobs"
     ],
-    "homepage": "https://github.com/ultraviolettes/filament-jobs-monitor",
+    "homepage": "https://github.com/msch-alpgis/filament-jobs-monitor",
     "license": "MIT",
     "authors": [
         {
