@@ -16,6 +16,7 @@ return [
     'name' => 'Name',
     'queue' => 'Queue',
     'progress' => 'Fortschritt',
+    'working_on' => 'Aktuelle Aufgabe',
     'started_at' => 'Gestartet am',
     'duration' => 'Dauer',
     'details' => 'Details',

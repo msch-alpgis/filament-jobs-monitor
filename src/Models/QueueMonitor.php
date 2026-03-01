@@ -25,12 +25,15 @@ class QueueMonitor extends Model
         'attempt',
         'progress',
         'exception_message',
+        'working_on',
+        'results',
     ];
 
     protected $casts = [
         'failed' => 'bool',
         'started_at' => 'datetime',
         'finished_at' => 'datetime',
+        'results' => 'array',
     ];
 
     /*

@@ -25,6 +25,7 @@ return [
     'name' => 'Name',
     'queue' => 'Queue',
     'progress' => 'Progress',
+    'working_on' => 'Working on',
     'started_at' => 'Started at',
     'duration' => 'Duration',
     'available_at' => 'Available at',

@@ -84,6 +84,8 @@ class QueueMonitorResource extends Resource
                 ProgressColumn::make('progress')
                     ->label(__('filament-jobs-monitor::translations.progress'))
                     ->sortable(),
+                TextColumn::make('working_on')
+                    ->label(__('filament-jobs-monitor::translations.working_on')),
                 TextColumn::make('started_at')
                     ->label(__('filament-jobs-monitor::translations.started_at'))
                     ->since()
@@ -155,6 +157,7 @@ class QueueMonitorResource extends Resource
                         'exception_message' => $queueMonitor->exception_message,
                         'failed' => $queueMonitor->failed,
                         'attempts' => $queueMonitor->attempt,
+                        'queueMonitor' => $queueMonitor,
                     ]))
                     ->modalSubmitAction(false),
             ])

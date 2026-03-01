@@ -25,6 +25,34 @@ trait QueueProgress
     }
 
     /**
+     * Update working on.
+     */
+    public function setWorkingOn(string $workingOn): void
+    {
+        if (! $monitor = $this->getQueueMonitor()) {
+            return;
+        }
+
+        $monitor->update([
+            'working_on' => $workingOn,
+        ]);
+    }
+
+    /**
+     * Update results
+     */
+    public function setResults(array $results): void
+    {
+        if (! $monitor = $this->getQueueMonitor()) {
+            return;
+        }
+
+        $monitor->update([
+            'results' => $results,
+        ]);
+    }
+
+    /**
      * Return Queue Monitor Model.
      */
     protected function getQueueMonitor(): ?QueueMonitor
