@@ -77,7 +77,8 @@ class QueueMonitorResource extends Resource
                     ->searchable(false),
                 TextColumn::make('name')
                     ->label(__('filament-jobs-monitor::translations.name'))
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('queue')
                     ->label(__('filament-jobs-monitor::translations.queue'))
                     ->sortable(),
@@ -102,12 +103,12 @@ class QueueMonitorResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('started_at', 'desc')
-            ->actions([
+            ->recordActions([
                 Action::make('retry')
                     ->label(__('filament-jobs-monitor::translations.retry'))
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
-                    ->form([
+                    ->schema([
                         TextInput::make('delay')
                             ->label(__('filament-jobs-monitor::translations.delay_in_minutes'))
                             ->helperText(__('filament-jobs-monitor::translations.delay_helper'))
@@ -161,12 +162,12 @@ class QueueMonitorResource extends Resource
                     ]))
                     ->modalSubmitAction(false),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkAction::make('retry')
                     ->label(__('filament-jobs-monitor::translations.retry'))
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
-                    ->form([
+                    ->schema([
                         TextInput::make('delay')
                             ->label(__('filament-jobs-monitor::translations.delay_in_minutes'))
                             ->helperText(__('filament-jobs-monitor::translations.delay_helper'))
@@ -238,7 +239,7 @@ class QueueMonitorResource extends Resource
                     ->label(__('filament-jobs-monitor::translations.retry_all_failed'))
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
-                    ->form([
+                    ->schema([
                         TextInput::make('delay')
                             ->label(__('filament-jobs-monitor::translations.delay_in_minutes'))
                             ->helperText(__('filament-jobs-monitor::translations.delay_helper'))
